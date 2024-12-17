@@ -8,7 +8,7 @@ import (
 
 type User struct {
 	gorm.Model
-	Id        uint `gorm:"primaryKey"`
+	Id        uint `gorm:"primaryKey";autoIncrement:true;unique;`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
@@ -17,8 +17,11 @@ type User struct {
 
 type Post struct {
 	gorm.Model
-	Id        uint `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
+	Id          uint `gorm:"primaryKey";autoIncrement:true;unique;`
+	Title       string
+	Description string
+	Detail      string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   gorm.DeletedAt `gorm:"index"`
 }
