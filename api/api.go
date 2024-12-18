@@ -11,19 +11,21 @@ func init() {
 }
 
 func createPost(c *gin.Context) {
-	Title := c.Query("title")
-	Description := c.Query("description")
-	Detail := c.Query("detail")
-	Post := models.Post{
-		Title:       Title,
-		Description: Description,
-		Detail:      Detail,
-	}
-	result := initializers.DB.Create(&Post)
-	if result.Error != nil {
+	var post models.Post
+	err := c.ShouldBindJSON(&post)
+	if err != nil {
 		c.JSON(
 			400, gin.H{
-				"message": result.Error,
+				"message": err,
+			},
+		)
+		return
+	}
+	action := initializers.DB.Create(&post)
+	if action.Error != nil {
+		c.JSON(
+			400, gin.H{
+				"message": action.Error,
 			},
 		)
 		return
@@ -36,10 +38,68 @@ func createPost(c *gin.Context) {
 	return
 }
 
-func updatePost(c *gin.Context) {
+func updatePost(c *gin.Context, postId int) {
+	var post models.Post
+	query := initializers.DB.First(&post, postId)
+	if query.Error != nil {
+		c.JSON(
+			400, gin.H{
+				"message": query.Error,
+			},
+		)
+		return
+
+	}
+	err := c.ShouldBindJSON(&post)
+	if err != nil {
+		c.JSON(
+			400, gin.H{
+				"message": err,
+			},
+		)
+		return
+	}
+	action := initializers.DB.Save(&post)
+	if action.Error != nil {
+		c.JSON(
+			400, gin.H{
+				"message": action.Error,
+			},
+		)
+		return
+	}
+	c.JSON(
+		200, gin.H{
+			"message": "post updated",
+		},
+	)
 	return
 }
 
-func deletePost(c *gin.Context) {
+func deletePost(c *gin.Context, postId int) {
+	var post models.Post
+	query := initializers.DB.First(&post, postId)
+	if query.Error != nil {
+		c.JSON(
+			400, gin.H{
+				"message": query.Error,
+			},
+		)
+		return
+	}
+	action := initializers.DB.Delete(&post)
+	if action.Error != nil {
+		c.JSON(
+			400, gin.H{
+				"message": action.Error,
+			},
+		)
+		return
+	}
+	c.JSON(
+		200, gin.H{
+			"message": "post deleted",
+		},
+	)
 	return
 }

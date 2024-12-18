@@ -8,7 +8,9 @@ import (
 
 type User struct {
 	gorm.Model
-	Id        uint `gorm:"primaryKey";autoIncrement:true;unique;`
+	Id        uint   `gorm:"primaryKey";autoIncrement:true;unique;`
+	Username  string `json:"username";binding:"required"`
+	Password  string `json:"password";binding:"required"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
@@ -17,10 +19,10 @@ type User struct {
 
 type Post struct {
 	gorm.Model
-	Id          uint `gorm:"primaryKey";autoIncrement:true;unique;`
-	Title       string
-	Description string
-	Detail      string
+	Id          uint   `gorm:"primaryKey";autoIncrement:true;unique;`
+	Title       string `json:"title";binding:"required"`
+	Description string `json:"username";binding:"required"`
+	Detail      string `json:"password";binding:"required"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   gorm.DeletedAt `gorm:"index"`
