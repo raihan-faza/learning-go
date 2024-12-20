@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -25,8 +26,17 @@ func generateToken(username string, password string) (string, error) {
 	return tokenString, nil
 }
 
-func validateToken(token string) {
-	return
+func validateToken(user_token string) error {
+	token, err := jwt.Parse(user_token, func(t *jwt.Token) (interface{}, error) {
+		return os.Getenv("secret"), nil
+	})
+	if err != nil {
+		return err
+	}
+	if !token.Valid {
+		return fmt.Errorf("invalid token")
+	}
+	return nil
 }
 
 func refreshToken(token string) {
