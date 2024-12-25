@@ -38,7 +38,3 @@ func validateToken(user_token string) error {
 	}
 	return nil
 }
-
-func refreshToken(token string) {
-	return
-}
